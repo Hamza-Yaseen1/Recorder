@@ -1,6 +1,6 @@
-# AI-Powered Screen Recorder
+# Screen Recorder
 
-A modern web application similar to Loom that allows users to record their screen with audio, upload recordings, and generate AI-powered timeline summaries using Claude AI.
+A modern web application for recording your screen with audio, uploading recordings, and playing them back with a simple download option.
 
 ## Features
 
@@ -8,9 +8,8 @@ A modern web application similar to Loom that allows users to record their scree
 - 🎤 Optional webcam overlay
 - ⏸️ Pause/resume recording
 - 📤 Video upload with progress indication
-- 🤖 AI-powered speech-to-text transcription and analysis
-- 📝 Automatic timeline summary generation (Claude AI)
-- ⏱️ Clickable timeline navigation
+- 📥 One-click video download
+- 🌓 Dark/Light theme with smooth animations
 - 📱 Responsive design
 
 ## Tech Stack
@@ -18,13 +17,12 @@ A modern web application similar to Loom that allows users to record their scree
 - **Framework**: Next.js 16.2.1 (App Router)
 - **Language**: TypeScript
 - **Styling**: Tailwind CSS 4
-- **AI**: Claude AI API
+- **Icons**: Lucide React
 - **Recording**: MediaDevices API, MediaRecorder API
 
 ## Prerequisites
 
 - Node.js 20+ installed
-- Claude API key (Coming Soon)
 - Modern browser with MediaDevices API support (Chrome, Firefox, Edge)
 
 ## Setup Instructions
@@ -35,18 +33,7 @@ A modern web application similar to Loom that allows users to record their scree
 npm install
 ```
 
-### 2. Configure Environment Variables
-
-Update `.env.local` file in the root directory:
-
-```env
-# Claude API Configuration (Coming Soon)
-CLAUDE_API_KEY=your-claude-api-key-here
-```
-
-**Important**: API key configuration coming soon.
-
-### 3. Run Development Server
+### 2. Run Development Server
 
 ```bash
 npm run dev
@@ -66,12 +53,11 @@ Open [http://localhost:3000](http://localhost:3000) in your browser.
 6. Use pause/resume as needed
 7. Click "Stop & Upload" when finished
 
-### Viewing Recordings
+### Viewing & Downloading Recordings
 
 1. After upload completes, you'll be redirected to the watch page
 2. Video player shows your recording
-3. Timeline summary appears on the right (AI-generated)
-4. Click any timeline segment to jump to that moment
+3. Click "Download Video" button to save the file locally
 
 ## Project Structure
 
@@ -79,25 +65,22 @@ Open [http://localhost:3000](http://localhost:3000) in your browser.
 ├── app/
 │   ├── api/
 │   │   ├── upload/          # Video upload endpoint
-│   │   ├── video/[id]/      # Fetch video metadata
-│   │   └── ai/
-│   │       ├── transcribe/  # Whisper transcription
-│   │       └── summarize/   # GPT summary generation
+│   │   └── video/[id]/      # Fetch video metadata
 │   ├── record/              # Recording interface
-│   ├── watch/[id]/          # Video player with timeline
+│   ├── watch/[id]/          # Video player with download
 │   ├── layout.tsx           # Root layout
 │   └── page.tsx             # Landing page
 ├── components/
 │   ├── Providers.tsx        # Client-side context providers
-│   ├── RecordingControls.tsx
-│   ├── VideoPlayer.tsx
-│   └── TimelineSummary.tsx
+│   ├── Navbar.tsx           # Navigation bar
+│   ├── ClientNavbar.tsx     # Client wrapper for navbar
+│   └── VideoPlayer.tsx      # Simple video player
 ├── context/
-│   └── RecordingContext.tsx # Global recording state
+│   ├── RecordingContext.tsx # Global recording state
+│   └── ThemeContext.tsx     # Dark/light theme management
 ├── hooks/
 │   └── useMediaRecorder.ts  # Recording logic hook
 ├── lib/
-│   ├── claude/              # Claude API utilities
 │   └── storage/             # File storage utilities
 ├── types/
 │   └── index.ts             # TypeScript definitions
@@ -113,8 +96,23 @@ Open [http://localhost:3000](http://localhost:3000) in your browser.
 |----------|--------|-------------|
 | `/api/upload` | POST | Upload recorded video |
 | `/api/video/[id]` | GET | Fetch video metadata |
-| `/api/ai/transcribe` | POST | Transcribe audio with Claude AI |
-| `/api/ai/summarize` | POST | Generate timeline summary with Claude AI |
+
+## Recording Settings
+
+### Video Quality Options
+- **Low**: 640x480, 1 Mbps - Smaller file size
+- **Medium**: 1280x720, 2.5 Mbps - Balanced (default)
+- **High**: 1920x1080, 5 Mbps - Best quality
+
+### Audio Options
+- System audio capture
+- Microphone recording
+- Echo cancellation and noise suppression
+
+### Additional Options
+- Optional webcam overlay
+- Pause/resume during recording
+- Real-time recording timer
 
 ## Browser Compatibility
 
@@ -125,7 +123,8 @@ Open [http://localhost:3000](http://localhost:3000) in your browser.
 
 ## Known Limitations
 
-- Videos are stored in memory (use database in production)
+- Videos are stored in `public/uploads/` directory
+- Metadata stored in memory (lost on server restart)
 - No user authentication (MVP feature)
 - Maximum file size: 1GB
 - Requires HTTPS in production for MediaDevices API
@@ -134,7 +133,7 @@ Open [http://localhost:3000](http://localhost:3000) in your browser.
 
 ### Next.js 16 Considerations
 
-This project uses Next.js 16 with the App Router. Key differences from older versions:
+This project uses Next.js 16 with the App Router:
 
 - Server Components by default
 - `'use client'` directive for client components
@@ -154,15 +153,15 @@ Screen recording requires:
 - Ensure recording completed before stopping
 - Check browser console for MediaRecorder errors
 
-### "Failed to transcribe audio" error
-- Verify Claude API key is set correctly (Coming Soon)
-- Check API quota/billing
-- Ensure video has audio track
-
 ### Video not loading in player
 - Check browser console for 404 errors
 - Verify upload completed successfully
 - Check `public/uploads/` directory exists
+
+### Recording permission denied
+- Grant screen sharing permission when prompted
+- Grant microphone permission if audio is enabled
+- Try refreshing the page and starting again
 
 ## Production Deployment
 
@@ -174,7 +173,7 @@ Before deploying to production:
 4. Implement rate limiting for API routes
 5. Set up proper error tracking (Sentry, etc.)
 6. Configure CORS if needed
-7. Enable HTTPS
+7. Enable HTTPS (required for MediaDevices API)
 
 ## License
 
