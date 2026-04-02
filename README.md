@@ -1,6 +1,6 @@
 # AI-Powered Screen Recorder
 
-A modern web application similar to Loom that allows users to record their screen with audio, upload recordings, and generate AI-powered timeline summaries using OpenAI's Whisper and GPT APIs.
+A modern web application similar to Loom that allows users to record their screen with audio, upload recordings, and generate AI-powered timeline summaries using Claude AI.
 
 ## Features
 
@@ -8,8 +8,8 @@ A modern web application similar to Loom that allows users to record their scree
 - 🎤 Optional webcam overlay
 - ⏸️ Pause/resume recording
 - 📤 Video upload with progress indication
-- 🤖 AI-powered speech-to-text transcription (OpenAI Whisper)
-- 📝 Automatic timeline summary generation (OpenAI GPT)
+- 🤖 AI-powered speech-to-text transcription and analysis
+- 📝 Automatic timeline summary generation (Claude AI)
 - ⏱️ Clickable timeline navigation
 - 📱 Responsive design
 
@@ -18,13 +18,13 @@ A modern web application similar to Loom that allows users to record their scree
 - **Framework**: Next.js 16.2.1 (App Router)
 - **Language**: TypeScript
 - **Styling**: Tailwind CSS 4
-- **AI**: OpenAI API (Whisper + GPT-3.5-turbo)
+- **AI**: Claude AI API
 - **Recording**: MediaDevices API, MediaRecorder API
 
 ## Prerequisites
 
 - Node.js 20+ installed
-- OpenAI API key ([Get one here](https://platform.openai.com/api-keys))
+- Claude API key (Coming Soon)
 - Modern browser with MediaDevices API support (Chrome, Firefox, Edge)
 
 ## Setup Instructions
@@ -40,15 +40,11 @@ npm install
 Update `.env.local` file in the root directory:
 
 ```env
-# OpenAI API Configuration (Required)
-OPENAI_API_KEY=sk-your-actual-api-key-here
-
-# Optional OpenAI Configuration
-OPENAI_ORG_ID=your_openai_org_id_here
-OPENAI_PROJECT_ID=your_openai_project_id_here
+# Claude API Configuration (Coming Soon)
+CLAUDE_API_KEY=your-claude-api-key-here
 ```
 
-**Important**: Replace `your_openai_api_key_here` with your actual OpenAI API key.
+**Important**: API key configuration coming soon.
 
 ### 3. Run Development Server
 
@@ -101,7 +97,7 @@ Open [http://localhost:3000](http://localhost:3000) in your browser.
 ├── hooks/
 │   └── useMediaRecorder.ts  # Recording logic hook
 ├── lib/
-│   ├── openai/              # OpenAI API utilities
+│   ├── claude/              # Claude API utilities
 │   └── storage/             # File storage utilities
 ├── types/
 │   └── index.ts             # TypeScript definitions
@@ -117,8 +113,8 @@ Open [http://localhost:3000](http://localhost:3000) in your browser.
 |----------|--------|-------------|
 | `/api/upload` | POST | Upload recorded video |
 | `/api/video/[id]` | GET | Fetch video metadata |
-| `/api/ai/transcribe` | POST | Transcribe audio with Whisper |
-| `/api/ai/summarize` | POST | Generate timeline summary with GPT |
+| `/api/ai/transcribe` | POST | Transcribe audio with Claude AI |
+| `/api/ai/summarize` | POST | Generate timeline summary with Claude AI |
 
 ## Browser Compatibility
 
@@ -159,8 +155,8 @@ Screen recording requires:
 - Check browser console for MediaRecorder errors
 
 ### "Failed to transcribe audio" error
-- Verify OPENAI_API_KEY is set correctly
-- Check OpenAI API quota/billing
+- Verify Claude API key is set correctly (Coming Soon)
+- Check API quota/billing
 - Ensure video has audio track
 
 ### Video not loading in player

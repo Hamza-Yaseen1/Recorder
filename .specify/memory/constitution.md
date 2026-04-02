@@ -7,7 +7,7 @@
 - **Reliability Over Features**: Ensure core functionality (recording, upload, transcription) works flawlessly
 - **Clean Code Standards**: Maintain high code quality with consistent patterns and proper documentation
 - **Progressive Enhancement**: Build with graceful degradation and accessibility as foundational requirements
-- **OpenAI Integration Excellence**: Leverage OpenAI APIs effectively for superior transcription and summarization
+- **Claude AI Integration Excellence**: Leverage Claude AI APIs effectively for superior transcription and summarization
 - **Next.js Best Practices**: Strictly follow Next.js 15+ patterns and App Router conventions
 
 ## 2. Code Quality Standards
@@ -51,7 +51,7 @@
 
 ## 6. Security & Privacy
 - Never store sensitive data (e.g., raw recordings) longer than necessary
-- Proper API key handling for OpenAI (use environment variables, never expose on client)
+- Proper API key handling for Claude AI (use environment variables, never expose on client)
 - Validate all user inputs and file uploads
 - Rate limiting and error boundaries where applicable
 - Implement proper authentication if required for user accounts

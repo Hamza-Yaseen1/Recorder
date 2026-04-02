@@ -3,7 +3,7 @@
 ## 1. Project Overview
 
 ### Objective
-Build a modern web application similar to Loom that allows users to record their screen along with audio (and optionally webcam), upload the recording, and generate an AI-powered timeline summary of the video. The application will leverage browser APIs for recording, OpenAI Whisper for transcription, and OpenAI GPT for generating timestamped summaries that users can click to jump to specific segments of their video.
+Build a modern web application similar to Loom that allows users to record their screen along with audio (and optionally webcam), upload the recording, and generate an AI-powered timeline summary of the video. The application will leverage browser APIs for recording, Claude AI speech-to-text for transcription, and Claude AI for generating timestamped summaries that users can click to jump to specific segments of their video.
 
 ### Success Vision
 A fully functional web application where users can start a screen recording with a single click, capture their screen and audio, upload the recording, and receive an AI-generated timeline summary with clickable timestamps that allow them to quickly navigate to key moments in their video. The application will provide a smooth, intuitive experience similar to Loom but enhanced with AI-powered summarization capabilities.
@@ -62,14 +62,14 @@ A fully functional web application where users can start a screen recording with
   - Upload can be canceled if needed
 
 #### Speech-to-Text Conversion
-- **Requirement**: Application must convert speech in videos to text using OpenAI Whisper
+- **Requirement**: Application must convert speech in videos to text using Claude AI speech-to-text
 - **Acceptance Criteria**:
   - Transcription accuracy is sufficient for generating meaningful summaries
   - Processing time is reasonable (under 2 minutes for 5-minute video)
   - Transcription includes timestamps for different segments
 
 #### AI Timeline Summary Generation
-- **Requirement**: Application must generate a timestamped summary of the video content using OpenAI GPT
+- **Requirement**: Application must generate a timestamped summary of the video content using Claude AI
 - **Acceptance Criteria**:
   - Summary includes key topics discussed at specific timestamps
   - Output format follows: "0:00–0:30 → Introduction" pattern
@@ -134,8 +134,8 @@ Recording → Blob → Upload → Transcription → Summary → Display
 1. User initiates screen recording via MediaDevices API
 2. MediaRecorder API captures screen and audio streams into video blob
 3. Video blob is uploaded to backend API route
-4. Backend processes video through OpenAI Whisper for transcription
-5. Backend processes transcription through OpenAI GPT for timeline summary
+4. Backend processes video through Claude AI speech-to-text for transcription
+5. Backend processes transcription through Claude AI for timeline summary
 6. Processed data (video, transcript, summary) is stored and served to frontend
 7. Frontend displays video player with clickable timeline summary
 
@@ -153,8 +153,8 @@ app/
 │   ├── record/
 │   │   ├── upload/route.ts  # Handle video upload
 │   ├── ai/
-│   │   ├── transcribe/route.ts  # Handle Whisper transcription
-│   │   └── summarize/route.ts   # Handle GPT summary generation
+│   │   ├── transcribe/route.ts  # Handle speech-to-text transcription
+│   │   └── summarize/route.ts   # Handle AI summary generation
 ```
 
 ### Key Components and Their Responsibilities
@@ -174,22 +174,22 @@ app/
 |---------------|-------|--------|---------|
 | POST /api/upload | FormData with video file | `{ id: string, status: "processing" \| "complete" }` | Upload recorded video for processing |
 | GET /api/video/[id] | Video ID in path | `{ id: string, status: "processing" \| "complete", videoUrl: string, summary: SummarySegment[], transcript: string }` | Retrieve video details and processed summary |
-| POST /api/ai/transcribe | FormData with audio/video file | `{ segments: { start: number, end: number, text: string }[] }` | Convert speech to text using Whisper API |
-| POST /api/ai/summarize | JSON with transcript text | `{ summary: SummarySegment[] }` | Generate timeline summary using GPT API |
+| POST /api/ai/transcribe | FormData with audio/video file | `{ segments: { start: number, end: number, text: string }[] }` | Convert speech to text using AI API |
+| POST /api/ai/summarize | JSON with transcript text | `{ summary: SummarySegment[] }` | Generate timeline summary using AI API |
 
 ## 7. AI Integration Details
 
-### Exact Flow for Whisper Transcription
+### Exact Flow for Speech-to-Text Transcription
 1. Backend receives video file upload
 2. Video file is temporarily stored
 3. Audio is extracted from video file
-4. Audio is sent to OpenAI Whisper API with timestamp precision
+4. Audio is sent to Claude AI API with timestamp precision
 5. Transcription with timestamps is received and stored
 6. Transcription is made available for summary generation
 
 ### GPT Prompt Strategy for Generating Timestamped Timeline Summary
 1. Input: Complete transcript with timestamps from Whisper API
-2. Process: Send transcript to OpenAI GPT with specific instructions to create timeline summary
+2. Process: Send transcript to Claude AI with specific instructions to create timeline summary
 3. Output format: Array of summary segments in format: "0:00–0:30 → Introduction"
 4. GPT system prompt: "Analyze the following transcript and create a concise timeline summary. For each distinct topic or section, provide a timestamp range in MM:SS format and a brief descriptive title. Format each segment as 'XX:YY–AA:BB → Title' where XX:YY is start time and AA:BB is end time."
 
@@ -301,7 +301,7 @@ interface SummarySegment {
 - **Browser incompatibility**: Detect unsupported browsers and show appropriate messaging
 - **Large file handling**: Implement chunked upload for videos exceeding size limits
 - **Network interruption**: Handle network failures during upload with resume capability
-- **AI API failures**: Implement retry logic and fallback messaging if OpenAI services are unavailable
+- **AI API failures**: Implement retry logic and fallback messaging if Claude AI services are unavailable
 - **Long processing times**: Show estimated processing time and allow users to return later
 - **Storage limits**: Handle cases where storage quota is exceeded with appropriate messaging
 - **Invalid file formats**: Validate uploaded files and reject unsupported formats with clear error message
@@ -334,4 +334,4 @@ interface SummarySegment {
 
 ## Next Steps in Spec-Driven Development
 
-This specification serves as the single source of truth for the Loom-like AI Screen Recorder project. The next step in Spec-Driven Development is to create a detailed Technical Plan that translates these requirements into implementation steps, considering the specified tech stack (Next.js 15+, TypeScript, Tailwind CSS, OpenAI APIs). The Technical Plan will define the architecture, component breakdown, and development phases needed to deliver this functionality.
+This specification serves as the single source of truth for the Loom-like AI Screen Recorder project. The next step in Spec-Driven Development is to create a detailed Technical Plan that translates these requirements into implementation steps, considering the specified tech stack (Next.js 15+, TypeScript, Tailwind CSS, Claude AI APIs). The Technical Plan will define the architecture, component breakdown, and development phases needed to deliver this functionality.
